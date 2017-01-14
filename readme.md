@@ -11,7 +11,7 @@ $ npm init -y
 Install webpack as a dev dependency.
 
 ```sh
-$ npm i webpack --save-dev
+$ npm i webpack@beta --save-dev
 ```
 
 Now we can file webpack inside.
@@ -95,7 +95,67 @@ Possible ways tp manage configuration.
 
 webpack-merge
 
+```sh
+$ npm i webpack-merge --save-dev
+```
 
+Update the configuration to use the merge package.
 
+```js
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const merge = require('webpack-merge')
 
+const PATHS = {
+    app: path.join(__dirname, 'app'),
+    build: path.join(__dirname, 'build')
+}
+
+const common = {
+
+    entry: {
+        app: PATHS.app
+    },
+
+    output: {
+        path: PATHS.build,
+        filename: '[name].js'
+    },
+
+    plugins: [
+
+        // define the html title
+        new HtmlWebpackPlugin({
+            title: 'Webpack demo',
+        })
+
+    ]
+
+}
+
+module.exports = function(env) {
+    return merge(common)
+}
+```
+
+```js
+{
+  "name": "webpack-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --env production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "^2.26.0",
+    "webpack": "^2.2.0-rc.4",
+    "webpack-merge": "^2.4.0"
+  }
+}
+```
 

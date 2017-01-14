@@ -1,6 +1,7 @@
 // load packages
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const merge = require('webpack-merge')
 
 // set the paths
 const PATHS = {
@@ -8,8 +9,7 @@ const PATHS = {
     build: path.join(__dirname, 'build')
 }
 
-// export the configuration
-module.exports = {
+const common = {
 
     // define the entry
     entry: {
@@ -32,4 +32,9 @@ module.exports = {
 
     ]
 
+}
+
+// export the configuration
+module.exports = function(env) {
+    return merge(common)
 }

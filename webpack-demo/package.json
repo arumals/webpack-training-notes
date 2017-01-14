@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack --env.target production"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "html-webpack-plugin": "^2.26.0",
-    "webpack": "^1.14.0",
+    "webpack": "^2.2.0-rc.4",
     "webpack-merge": "^2.4.0"
   }
 }
