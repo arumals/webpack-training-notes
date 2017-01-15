@@ -226,6 +226,76 @@ Now we can update the start process.
 }
 ```
 
+### Configuring Hot Module Replacement (HRM).
+
+Inside webpack.parts.js we can store the settings for HMR.
+
+```js
+const webpack = require('webpack')
+
+exports.devServer = function(options) {
+    return {
+        devServer: {
+            historyApiFallback: true,
+            hot: true,
+            hotOnly: true,
+            inline: true,
+            stats: 'errors-only',
+            host: 'localhost',
+            port: 8080
+        },
+        plugins: [
+            new webpack.HotModuleReplacementPlugin({
+            })
+        ]
+    }
+}
+```
+
+And we can inject the configuration inside webpack.config.js.
+
+```js
+const parts = require('./webpack.parts')
+...
+module.exports = function(env) {
+    return merge(common, {
+            performance: {
+                hints: false
+            },
+            plugins: [
+                new webpack.NamedModulesPlugin()
+            ]
+        },
+        parts.devServer()
+    )
+}
+```
+
+At this point it wont refresh our components changes because we defined the { hotOnly: true } value. In case that we need to change this behaviour we need to overrite this to false.
+
+### Debug details.
+
+We can see more details about the hot reload status by opening.
+
+```
+http://localhost:8080/webpack-dev-server/
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

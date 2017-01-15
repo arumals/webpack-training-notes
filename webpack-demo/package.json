@@ -1,23 +1,23 @@
 {
-  "name": "webpack-demo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
-    "build": "webpack --env production"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "html-webpack-plugin": "^2.26.0",
-    "webpack": "^2.2.0-rc.4",
-    "webpack-dev-server": "^2.2.0-rc.0",
-    "webpack-merge": "^2.4.0"
-  },
-  "dependencies": {
-    "nodemon": "^1.11.0"
-  }
+    "name": "webpack-demo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
+        "build": "webpack --env production"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "html-webpack-plugin": "^2.26.0",
+        "webpack": "^2.2.0-rc.4",
+        "webpack-dev-server": "^2.2.0-rc.0",
+        "webpack-merge": "^2.4.0"
+    },
+    "dependencies": {
+        "nodemon": "^1.11.0"
+    }
 }
