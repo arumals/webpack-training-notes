@@ -3,6 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const merge = require('webpack-merge')
+const parts = require('./webpack.parts')
 
 // set the paths
 const PATHS = {
@@ -38,17 +39,23 @@ const common = {
 // export the configuration
 module.exports = function(env) {
 
-    return merge(common, {
-
-        // disable performance hints during development
-        performance: {
-            hints: false
+    const serverConfig = merge(common, {
+            // disable performance hints during development
+            performance: {
+                hints: false
+            },
+            // ?
+            plugins: [
+                new webpack.NamedModulesPlugin()
+            ]
         },
+        // HRM
+        parts.devServer(),
+        { devServer: { hotOnly: false } }
+    )
 
-        plugins: [
-            new webpack.NamedModulesPlugin()
-        ]
+    console.log(serverConfig)
 
-    })
+    return serverConfig
 
 }
