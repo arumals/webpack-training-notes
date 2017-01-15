@@ -1,4 +1,4 @@
-# WebPack
+# WebPack.
 
 ## Setting up the Project
 
@@ -76,7 +76,7 @@ Add the webpack process to the scripts section inside webpack.config.js.
 
     This can be run in any folder inside the project, because node adds the node_modules/.bin folder to the PATH temporary.
 
-Plugins
+Plugins.
 
 - case-sensitive-paths-webpack-plugin
 - npm-install-webpack-plugin
@@ -85,7 +85,7 @@ Plugins
 - nyan-progress-webpack-plugin
 - webpack-dashboard
 
-## Spliting the configuration
+## Spliting the configuration.
 
 Possible ways tp manage configuration.
 
@@ -138,24 +138,94 @@ module.exports = function(env) {
 }
 ```
 
+Now we can pass the env value inside our build task
+
 ```js
 {
-  "name": "webpack-demo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --env production"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "html-webpack-plugin": "^2.26.0",
-    "webpack": "^2.2.0-rc.4",
-    "webpack-merge": "^2.4.0"
-  }
+    ...
+    "scripts": {
+        ...
+        "build": "webpack --env production"
+    },
+    ...
 }
 ```
+
+## Automatic WDS Refresh.
+
+Install webpack server.
+
+```sh
+$ npm i webpack-dev-server@2.2.0-rc.0 --save-dev
+```
+
+Now we can add webpack-dev-server to our start process.
+
+```js
+{
+    ...
+    "scripts": {
+        ...
+        "start": "webpack-dev-server --env development",
+        ...
+    },
+    ...
+}
+
+```
+
+If for some reason the port 8080 is already used, podemos verificarlo usando.
+
+```sh
+$ netstat -na | grep 8080
+```
+
+Retrieve the machine ip to access it from the network.
+
+```sh
+$ ifconfig | grep inet
+```
+
+If we want to change the port used to initialize the server, we can use.
+
+For Max or Linux.
+
+```sh
+$ export PORT=3000
+```
+
+For Windows.
+
+```sh
+$ set PORT=3000
+```
+
+### Alternative ways to use webpack-dev-server.
+
+- Set up an Express server for our own and use WDS as a middleware.
+- We can use [dotent](https://www.npmjs.com/package/dotenv) to define variables through a .env file.
+
+### Making WDS faster to develop configuration.
+
+We can use nodemon to track configuration changes and restart WDS automatically.
+
+```sh
+$ npm i nodemon --save-dev
+```
+
+Now we can update the start process.
+
+```js
+{
+    ...
+    "scripts": {
+        ...
+        "build": "webpack --env production"
+    },
+    ...
+}
+```
+
+
+
 
