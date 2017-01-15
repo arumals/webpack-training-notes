@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test:lint": "eslint . --cache",
         "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
         "build": "webpack --env production"
     },
@@ -12,6 +12,8 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "eslint": "^3.13.1",
+        "eslint-loader": "^1.6.1",
         "html-webpack-plugin": "^2.26.0",
         "webpack": "^2.2.0-rc.4",
         "webpack-dev-server": "^2.2.0-rc.0",
