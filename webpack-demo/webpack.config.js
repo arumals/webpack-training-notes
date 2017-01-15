@@ -1,61 +1,70 @@
 // load packages
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const merge = require('webpack-merge')
-const parts = require('./webpack.parts')
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const merge = require('webpack-merge');
+const parts = require('./webpack.parts');
 
 // set the paths
 const PATHS = {
     app: path.join(__dirname, 'app'),
     build: path.join(__dirname, 'build')
-}
+};
 
-const common = {
+const common = merge({
 
-    // define the entry
-    entry: {
-        app: PATHS.app
+        // define the entry
+        entry: {
+            app: PATHS.app
+        },
+
+        // define the output
+        output: {
+            path: PATHS.build,
+            filename: '[name].js'
+        },
+
+        // define the plugins
+        plugins: [
+
+            // define the html title
+            new HtmlWebpackPlugin({
+                title: 'Webpack demo',
+            })
+
+        ]
+
     },
 
-    // define the output
-    output: {
-        path: PATHS.build,
-        filename: '[name].js'
-    },
+    // lint the code
+    parts.lintJavaScript(PATHS.app)
 
-    // define the plugins
-    plugins: [
-
-        // define the html title
-        new HtmlWebpackPlugin({
-            title: 'Webpack demo',
-        })
-
-    ]
-
-}
+);
 
 // export the configuration
-module.exports = function(env) {
+module.exports = function() {
 
     const serverConfig = merge(common, {
+
             // disable performance hints during development
             performance: {
                 hints: false
             },
+
             // ?
             plugins: [
                 new webpack.NamedModulesPlugin()
             ]
         },
+
         // HRM
         parts.devServer(),
+
+        // disable hotOnly on HRM
         { devServer: { hotOnly: false } }
-    )
 
-    console.log(serverConfig)
+    );
 
-    return serverConfig
+    return serverConfig;
 
-}
+};

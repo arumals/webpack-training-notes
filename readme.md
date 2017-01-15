@@ -281,21 +281,87 @@ We can see more details about the hot reload status by opening.
 http://localhost:8080/webpack-dev-server/
 ```
 
+### ESLint.
 
+```sh
+$ npm i eslint --save-dev
+```
 
+Now we can set the .eslint file.
 
+```js
+module.exports = {
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-unused-vars": [
+            "warn"
+        ],
+        "no-console": 0
+    }
+}
+```
 
+And the .eslintignore.
 
+```js
+node_modules/
+build/
+```
 
+Update your scripts and add a new one called "test:lint".
 
+```js
+{
+    ...
+    "scripts": {
+        "test:lint": "eslint . --cache",
+        ...
+    },
+    ...
+}
+```
 
+Run your lint test using.
 
+```sh
+$ npm run test:lint --silent
+```
 
+You can fix your errors using.
 
+```sh
+$ node_modules/.bin/esling . --fix
+```
 
+### Connecting ESLint with Webpack.
 
+```sh
+$ npm i eslint-loader --save-dev
+```
 
-
-
-
-
+Eslint will use the global installed ESLint unless you have one included with the project itself.
