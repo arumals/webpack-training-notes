@@ -1,5 +1,6 @@
 // load packages
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const merge = require('webpack-merge')
 
@@ -36,5 +37,18 @@ const common = {
 
 // export the configuration
 module.exports = function(env) {
-    return merge(common)
+
+    return merge(common, {
+
+        // disable performance hints during development
+        performance: {
+            hints: false
+        },
+
+        plugins: [
+            new webpack.NamedModulesPlugin()
+        ]
+
+    })
+
 }
