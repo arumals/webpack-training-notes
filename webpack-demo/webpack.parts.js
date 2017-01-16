@@ -1,5 +1,17 @@
 const webpack = require('webpack');
 
+exports.loadCSS = function(paths) {
+    return {
+        module: {
+            rules: [{
+                test: /\.css$/,
+                include: paths,
+                use: ['style-loader', 'css-loader?modules']
+            }]
+        }
+    }
+}
+
 exports.lintJavaScript = function(paths) {
     return {
         module: {

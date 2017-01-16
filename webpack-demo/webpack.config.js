@@ -57,6 +57,9 @@ module.exports = function() {
             ]
         },
 
+        // css
+        parts.loadCSS(PATHS.app),
+
         // HRM
         parts.devServer(),
 
