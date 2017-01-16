@@ -1,6 +1,6 @@
 # WebPack.
 
-## Setting up the Project
+## Chapter 1 : Developing with Webpack.
 
 Create a minimal package.json version file.
 
@@ -449,3 +449,192 @@ const common = merge({
     parts.lintJavaScript(PATHS.app)
 );
 ```
+
+## Chapter 2 : Handling Styles with Webpack.
+
+### Loading Styles.
+
+To load CSS, well need css-loader and style-loader.
+If an @import points to an external resource, css-loader will skipt it.
+After css-loader has done its part, style-loader picks up the output and inject the CSS into the resulting bundle.
+
+```sh
+$ npm i css-loader style-loader --save-dev
+```
+
+Create a configuration for the css-loader as a function.
+
+```js
+modules.export = function(paths){
+    return {
+        module: {
+            rules:[{
+                test: /\.css$/,
+                include: paths,
+                use: ['style-loader','css-loader']
+            }]
+        }
+    }
+}
+```
+
+And we can merge that configuration with our webpack.config.js.
+
+```js
+module.exports = function() {
+    const serverConfig = merge(common, {
+        ...
+        },
+        ...
+        parts.loadCSS(PATHS.app),
+        parts.devServer(),
+        { devServer: { hotOnly: false } }
+    );
+    return serverConfig;
+};
+```
+
+El loader que utilizamos...
+
+```js
+['style-loader', 'css-loader']
+```
+
+Puede ser leido asi...
+
+```js
+styleLoader(cssLoader(input))
+```
+
+Now we need to create an app/main.css file.
+
+```css
+.redButton {
+    background: red;
+}
+```
+
+And we can import it from index.js.
+
+```js
+import './main.css';
+...
+document.body.appendChild(component());
+```
+
+At this point we can refresh the browser and see the results.
+
+### Understanding CSS Scroping and CSS Modules.
+
+CSS Modules introduce local scope per import so you dont have to worry about namespace collisions.
+
+You can enable it through `css-loader?modules`.
+
+Now we have to import the styles to the component and apply the style to the element.
+
+```js
+import styles from './main.css';
+
+export default function (){
+    const element = document.createElement( 'h1' );
+    element.className = styles.redButton;
+    ....
+    return element;
+}
+```
+
+After this change your class definitions will remain local to the files. In case you want global class definitions youll need to wrap them within `:global(.redButton){...}`.
+
+### LESS.
+
+We can process less using the less-loader.
+
+```js
+{
+    test: /\.less$/,
+    use: ['style-loader','css-loader','less-loader']
+}
+```
+
+### SASS.
+
+It is possible to use the sass-loader for SASS processer.
+
+```js
+{
+    test: /\.scss$/,
+    use: ['style-loader','css-loader','sass-loader']
+}
+```
+
+And if more performance is needed we can also use fast-sass-loader.
+
+### Stylus.
+
+We can process stylus using stylus-loader and yeticss.
+
+```js
+{
+    test: /\.styl$/,
+    use: ['style-loader', 'css-loader', 'stylus-loader']
+}
+
+...
+
+plugins: [
+    new webpack.LoaderOptionsPlugin({
+        options: {
+            stylus: {
+                use: [require('yeticss')]
+            }
+        }
+    })
+]
+```
+
+### PostCSS.
+
+We can use post css using postcss-loader.
+
+```js
+rules: [
+    {
+        test: /\.css$/,
+        use: ['style-loader','css-loader','postcss-loader']
+    }
+]
+```
+
+And we have to add also a postcss.config.js file.
+
+```js
+module.exports = {
+  plugins: {
+    autoprefixer: {},
+    precss: {}
+  }
+};
+```
+
+### Understanding Lookups.
+
+If you import less/sass files from another, use the exact same pattern.
+
+```js
+@import "./variables.less";
+```
+
+You can add less/sass files directly from your node_modules directory.
+
+```js
+@import "~bootstrap/less/bootstrap";
+```
+
+### Enabling sourcemaps.
+
+If you want to enable source maps, you ust enable `sourceMap` option for css-loader and set `output.publicPath` to an absolute url.
+
+### Bootstrap.
+
+It can be installed using `bootstrap-loader` which let you customize it.
+
