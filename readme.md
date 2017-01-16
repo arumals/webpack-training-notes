@@ -87,7 +87,7 @@ Plugins.
 
 ## Spliting the configuration.
 
-Possible ways tp manage configuration.
+Possible ways to manage configuration.
 
 - Maintain configuration in multiple files and ponint to each through the --config parameter.
 - Push configuration to a library which you then consume.
@@ -365,3 +365,87 @@ $ npm i eslint-loader --save-dev
 ```
 
 Eslint will use the global installed ESLint unless you have one included with the project itself.
+
+We can define our rules using the .eslintrc.js file.
+
+```js
+module.exports = {
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-unused-vars": [
+            "warn"
+        ],
+        "no-console": 0
+    }
+}
+```
+
+We can define also the folders to be ignored using .eslintignore.
+
+```js
+node_modules/
+build/
+```
+
+To keep our configuration in the webpack.parts.js we create a new function and we export it.
+
+```js
+exports.lintJavaScript = function(paths) {
+    return {
+        module: {
+            rules: [{
+                test: /\.js$/,
+                include: paths,
+                use: 'eslint-loader',
+                enforce: 'pre'
+            }]
+        }
+    }
+}
+```
+
+Finally inside the webpack.config.js we can merge to the common object with our lint configuration.
+
+```js
+const common = merge({
+        entry: {
+            app: PATHS.app
+        },
+        output: {
+            path: PATHS.build,
+            filename: '[name].js'
+        },
+        plugins: [
+            new HtmlWebpackPlugin({
+                title: 'Webpack demo',
+            })
+        ]
+    },
+    parts.lintJavaScript(PATHS.app)
+);
+```
