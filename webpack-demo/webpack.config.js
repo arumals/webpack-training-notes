@@ -29,7 +29,7 @@ const common = merge({
 
             // define the html title
             new HtmlWebpackPlugin({
-                title: 'Webpack demo',
+                title: 'Webpack demo'
             })
 
         ]
@@ -42,7 +42,11 @@ const common = merge({
 );
 
 // export the configuration
-module.exports = function() {
+module.exports = function(env) {
+
+    if (env == 'production') {
+        return merge(common, parts.extractCSS());
+    }
 
     const serverConfig = merge(common, {
 

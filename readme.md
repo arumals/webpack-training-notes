@@ -524,7 +524,7 @@ document.body.appendChild(component());
 
 At this point we can refresh the browser and see the results.
 
-### Understanding CSS Scroping and CSS Modules.
+#### Understanding CSS Scroping and CSS Modules.
 
 CSS Modules introduce local scope per import so you dont have to worry about namespace collisions.
 
@@ -545,7 +545,7 @@ export default function (){
 
 After this change your class definitions will remain local to the files. In case you want global class definitions youll need to wrap them within `:global(.redButton){...}`.
 
-### LESS.
+#### LESS.
 
 We can process less using the less-loader.
 
@@ -556,7 +556,7 @@ We can process less using the less-loader.
 }
 ```
 
-### SASS.
+#### SASS.
 
 It is possible to use the sass-loader for SASS processer.
 
@@ -569,7 +569,7 @@ It is possible to use the sass-loader for SASS processer.
 
 And if more performance is needed we can also use fast-sass-loader.
 
-### Stylus.
+#### Stylus.
 
 We can process stylus using stylus-loader and yeticss.
 
@@ -592,7 +592,7 @@ plugins: [
 ]
 ```
 
-### PostCSS.
+#### PostCSS.
 
 We can use post css using postcss-loader.
 
@@ -616,7 +616,7 @@ module.exports = {
 };
 ```
 
-### Understanding Lookups.
+#### Understanding Lookups.
 
 If you import less/sass files from another, use the exact same pattern.
 
@@ -630,11 +630,81 @@ You can add less/sass files directly from your node_modules directory.
 @import "~bootstrap/less/bootstrap";
 ```
 
-### Enabling sourcemaps.
+#### Enabling sourcemaps.
 
 If you want to enable source maps, you ust enable `sourceMap` option for css-loader and set `output.publicPath` to an absolute url.
 
-### Bootstrap.
+#### Bootstrap.
 
 It can be installed using `bootstrap-loader` which let you customize it.
 
+### Separating CSS.
+
+Webpack provides a means to generate a separate CSS bundles using `ExtractTextPlugin`.
+
+```sh
+$ npm i extract-text-webpack-plugin@2.0.0-beta.4 --save-dev
+```
+
+ Now we can create the configuration for the css processor inside the webpack.parts.js.
+
+```js
+....
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+exports.extractCSS = function(paths) {
+    return {
+        module: {
+            rules: [{
+                test: /\.css$/,
+                include: paths,
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader',
+                    loader: 'css-loader'
+                })
+            }]
+        },
+        plugins: [
+            new ExtractTextPlugin('[name].css')
+        ]
+    }
+}
+```
+
+And we create a different configuration for the production environment inside webpack.config.js.
+
+```js
+module.exports = function(env) {
+    if (env == 'production') {
+        return merge(common, parts.extractCSS());
+    }
+    ....
+    return serverConfig;
+};
+```
+
+#### Managing styles outside JS.
+
+We can package our styles using [globbinb](https://www.npmjs.com/package/glob).
+
+```js
+...
+const glob = require('glob');
+
+const PATHS = {
+  app: path.join(__dirname, 'app'),
+  build: path.join(__dirname, 'build'),
+  style: glob.sync('./app/**/*.css')
+};
+
+const common = merge(
+  {
+    entry: {
+      app: PATHS.app,
+      style: ['purecss'].concat(PATHS.style)
+    },
+    ...
+  },
+  ...
+);
+```
