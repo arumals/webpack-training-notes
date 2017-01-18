@@ -44,33 +44,46 @@ const common = merge({
 // export the configuration
 module.exports = function(env) {
 
-    if (env == 'production') {
-        return merge(common, parts.extractCSS());
+    let serverConfig;
+
+    switch(env){
+
+        case 'production':
+            serverConfig = merge(
+                common,
+                parts.extractCSS(),
+                parts.purifyCSS(PATHS.app)
+            );
+        break;
+
+        default:
+            serverConfig = merge(common, {
+
+                    // disable performance hints during development
+                    performance: {
+                        hints: false
+                    },
+
+                    // ?
+                    plugins: [
+                        new webpack.NamedModulesPlugin()
+                    ]
+
+                },
+
+                // css
+                parts.loadCSS(PATHS.app),
+
+                // HRM
+                parts.devServer(),
+
+                // disable hotOnly on HRM
+                { devServer: { hotOnly: false } }
+
+            );
+        break;
+
     }
-
-    const serverConfig = merge(common, {
-
-            // disable performance hints during development
-            performance: {
-                hints: false
-            },
-
-            // ?
-            plugins: [
-                new webpack.NamedModulesPlugin()
-            ]
-        },
-
-        // css
-        parts.loadCSS(PATHS.app),
-
-        // HRM
-        parts.devServer(),
-
-        // disable hotOnly on HRM
-        { devServer: { hotOnly: false } }
-
-    );
 
     return serverConfig;
 

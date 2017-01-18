@@ -1,5 +1,28 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const PurifyCSSPlugin = require('purifycss-webpack-plugin');
+
+exports.purifyCSS = function(paths) {
+    paths = Array.isArray(paths) ? paths : [paths];
+    return {
+        plugins: [
+            new PurifyCSSPlugin({
+                basePath: '/',
+                paths: paths.map((path) => {
+                    console.log('path : ',path);
+                    return `${path}/*`;
+                }),
+                resolveExtensions: ['.html'],
+                purifyOptions: {
+                    minify: true,
+                    info: true,
+                    // rejected: true
+                }
+
+            })
+        ]
+    };
+}
 
 exports.extractCSS = function(paths) {
     return {
@@ -25,7 +48,7 @@ exports.loadCSS = function(paths) {
             rules: [{
                 test: /\.css$/,
                 include: paths,
-                use: ['style-loader', 'css-loader?modules']
+                use: ['style-loader', 'css-loader']
             }]
         }
     }
