@@ -1,3 +1,4 @@
+ui
 # WebPack.
 
 ## Chapter 1 : Developing with Webpack.
@@ -708,3 +709,58 @@ const common = merge(
   ...
 );
 ```
+
+### Eliminating Unused CSS.
+
+#### Enabling PurifyCSS.
+
+Webpack can use [purifycss-webpack-plugin](https://www.npmjs.com/package/purifycss-webpack-plugin).
+
+```sh
+$ npm i purifycss-webpack-plugin --save-dev
+```
+
+Prepare the configuration inside webpack.parts.js.
+
+```js
+...
+const PurifyCSSPlugin = require('purifycss-webpack-plugin');
+
+exports.purifyCSS = function(paths){
+    paths = Array.isArray(paths) ? paths : [paths];
+    return {
+        new PurifyCSSPlugin({
+            basePath: '/',
+            paths: paths.map((path) => {
+                console.log('path : ',path);
+                return `${path}/*`;
+            }),
+            resolveExtensions: ['.html'],
+            purifyOptions: {
+                minify: true,
+                info: true,
+            }
+
+        })
+    };
+}
+...
+```
+
+Prepare a block inside the webpack.config.js so we just compile css for production environment.
+
+```js
+module.exports = function(env) {
+
+    if (env == 'production') {
+        return merge(
+            common,
+            parts.extractCSS(),
+            parts.purifyCSS(PATHS.app)
+        );
+    }
+
+    ...
+}
+```
+
