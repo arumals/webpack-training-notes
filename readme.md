@@ -764,3 +764,69 @@ module.exports = function(env) {
 }
 ```
 
+### Linting CSS.
+
+To get started, install the required dependencies:
+
+```sh
+$ npm install --save-dev stylelint-webpack-plugin
+```
+
+Update the `webpack.parts.js` to create the configuration block.
+
+```js
+exports.lintCSS = function(paths) {
+    return {
+        plugins: [
+            new StyleLintPlugin({
+                configFile: '.stylelintrc',
+                // context: paths.app,
+                files: './app/*.css',
+                failOnError: false,
+                quiet: false,
+                // syntax: 'scss'
+            }),
+        ],
+    };
+};
+```
+
+Merge it in webpack.config.js.
+
+```js
+const common = merge({
+    ...
+    },
+
+    parts.lintCSS(PATHS.app),
+    parts.lintJavaScript(PATHS.app)
+
+);
+```
+
+Create the .stylelintrc config file with the rules.
+
+```js
+{
+  "rules": {
+    "block-no-empty": null,
+    "color-no-invalid-hex": true,
+    "comment-empty-line-before": [ "always", {
+      "ignore": ["stylelint-commands", "between-comments"]
+    } ],
+    "declaration-colon-space-after": "always",
+    "indentation": ["tab", {
+      "except": ["value"]
+    }],
+    "max-empty-lines": 2,
+    "rule-nested-empty-line-before": [ "always", {
+      "except": ["first-nested"],
+      "ignore": ["after-comment"]
+    } ],
+    "unit-whitelist": ["em", "rem", "%", "s"]
+  }
+}
+```
+
+Now we are going to get warnings.
+
