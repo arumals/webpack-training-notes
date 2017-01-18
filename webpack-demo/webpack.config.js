@@ -3,7 +3,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
-const parts = require('./webpack.parts');
+const parts = require('./webpack.parts')
+
 
 // set the paths
 const PATHS = {
@@ -37,6 +38,7 @@ const common = merge({
     },
 
     // lint the code
+    parts.lintCSS(PATHS.app),
     parts.lintJavaScript(PATHS.app)
 
 );
