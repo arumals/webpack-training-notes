@@ -829,3 +829,127 @@ Create the .stylelintrc config file with the rules.
 
 Now we are going to get lint warnings.
 
+## Understanding Loaders.
+
+### Anatomy of a loader.
+
+Webpack supports a large variety of loaders and a couple of JS formats. The idea is the same, you set up a loader and connect those with your directory structure.
+
+```js
+module.exports = {
+    module:{
+        rules:[{
+            test: /\.js$/,
+            include: path.join(__dirname,'app'),
+            exclude(path){
+                return path.match(/node_modules/)
+            },
+            use: 'babel-loader'
+        }]
+    }
+}
+```
+
+### Loader evaluation order.
+
+Loaders are always evaluated from right to left and from bottom to top.
+
+This example.
+
+```js
+{
+    test: /\.css$/,
+    use: ['style-loader','css-loader']
+}
+```
+
+Is equivalent to.
+
+```js
+{
+    test: /\.css$/
+    use: ['style-loader']
+},
+{
+    test: /\.css$/,
+    use: ['css-loader']
+}
+```
+
+### Passing parameters to a loader.
+
+The query format.
+
+```js
+{
+    test: /\.css$/,
+    use: 'babel-loader?cacheDirectory,presets[]=react,presets[]=es2015',
+}
+```
+
+It is preferable to use a combination of `loader` and `options` fields.
+
+```js
+{
+    // conditions
+    test: /\.js$/,
+    include: PATHS.app,
+
+    // actions
+    use: {
+        loader: 'babel-loader',
+        options: {
+            cacheDirectory: true,
+            presets: ['react','es2015']
+        }
+    }
+}
+```
+
+If we want to use more than one loader.
+
+```js
+{
+    // conditions
+    test: /\.js$/,
+    include: PATHS.app,
+
+    // actions
+    use: [
+        {
+            loader: 'babel-loader',
+            options: {
+                cacheDirectory: true,
+                presets: ['react','es2015'],
+            },
+        },
+        // aditional loaders
+    ],
+},
+```
+
+### Inline definitions.
+
+Process `foo` through `url-loader` and other possible matches.
+
+```js
+import 'url-loader!./foo.png';
+```
+
+Override possible higher level match completely.
+
+```js
+import '!!url-loader!./bar.png'
+```
+
+So we can simplify this way.
+
+```js
+{
+    entry: {
+        app: 'babel-loader!./app',
+    },
+},
+```
+
+
