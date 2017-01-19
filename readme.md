@@ -1,4 +1,3 @@
-ui
 # WebPack.
 
 ## Chapter 1 : Developing with Webpack.
@@ -828,5 +827,5 @@ Create the .stylelintrc config file with the rules.
 }
 ```
 
-Now we are going to get warnings.
+Now we are going to get lint warnings.
 
