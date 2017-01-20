@@ -1,4 +1,4 @@
-import 'style-loader!css-loader!../node_modules/purecss/build/pure.css';
+import 'purecss';
 import './main.css';
 import component from './component';
 document.body.appendChild(component());
