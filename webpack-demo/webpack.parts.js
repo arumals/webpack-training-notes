@@ -37,7 +37,7 @@ exports.loadCSS = function(paths) {
         module: {
             rules: [{
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: ['style-loader', 'css-loader'],
             }]
         }
     }
@@ -68,7 +68,6 @@ exports.purifyCSS = function(paths) {
             new PurifyCSSPlugin({
                 basePath: '/',
                 paths: paths.map((path) => {
-                    console.log('path : ', path);
                     return `${path}/*`;
                 }),
                 resolveExtensions: ['.html'],
