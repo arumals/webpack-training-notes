@@ -112,3 +112,23 @@ exports.imageLoader = function(paths){
         }
     }
 }
+
+exports.loadFonts = function(options){
+    const name = (options && options.name) || 'fonts/[hash].[ext]';
+
+    return {
+        module: {
+            rules: [
+                {
+                    // capture eot, ttf, svg, woff and woff2
+                    test: /\.(woff2?|ttf|svg|eot)(\?v=\d+\.\d+\.\d+)?$/,
+                    loader: 'file-loader',
+                    options: {
+                        name: name,
+                    },
+                },
+            ],
+        },
+    };
+};
+

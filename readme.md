@@ -1049,3 +1049,147 @@ If you need to retrieve the image properties such as its dimensions, you can do 
 
 In order to use sprites you can use `webpack-spritesmith`.
 
+### Loading Fonts.
+
+There are typically four font formats to worry about, each for certain browser.
+
+#### Choosing one format.
+
+If you exclude Opera Mini, all browsers support `.woff` format. If we go with this format, we can have a file-loader and url setup.
+
+```js
+{
+    test: /\.woff$/,
+    loader: 'url-loader',
+    options: {
+        limit: 5000,
+    },
+},
+```
+
+A more elaborated way to achieve a similar result.
+
+```js
+{
+    // Match woff2 in addition to patterns like .woff?v=1.1.1.
+    test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
+    loader: 'url-loader',
+    options: {
+        limit: 50000,
+        mimetype: 'application/font-woff',
+        name: './fonts/[hash].[ext]',
+    },
+},
+```
+
+#### Supporting multiple formats.
+
+If we want to make sure our site looks good on a maximum amount of browsers, we might as well use just `file-loader` and forget about inlining.
+
+```js
+{
+    test: /\.woff2?$/,
+    loader: 'url-loader',
+    options: {
+        name: 'fonts/[hash].[ext]',
+        limit: 50000,
+        mimetype: 'application/font-woff',
+    },
+},
+{
+    test: /\.(ttf,svg,eot)$/,
+    loader: 'file-loader',
+    options: {
+        name: 'fonts/[hash].[ext]',
+    },
+},
+```
+
+Assuming we are goint to inline the WOFF format, we should have it like this.
+
+```css
+@font-face {
+    font-family: 'myfontfamily';
+    src: url('myfontfile.woff') format('woff2'),
+        url('myfontfile.ttf') format('truetype');
+}
+```
+
+This way the browsers will try to consume first the inlined font before loading remote alternatives.
+
+#### Manipulating `file-loader` output path and `publicPath`.
+
+```js
+{
+     test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
+     loader: 'url-loader',
+     options: {
+        limit: 5000,
+        mimetype: 'application/font-woff',
+        name: './fonts/[hash].[ext]',
+        publicPath: '../',
+     },
+},
+```
+
+#### Using font awesome
+
+The ideas above can be wrapped into a configuration part that allows you to work with `Font Awesome`.
+
+Install font awesome.
+
+```sh
+$ npm i --save-dev font-awesome
+```
+
+Define the `loadFonts` function in `webpacks.parts.js`.
+
+```js
+exports.loadFonts = function(options){
+    const name = (options && options.name) || 'fonts/[hash].[ext]';
+    return {
+        module: {
+            rules: [
+                {
+                    test: /\.(woff2?|ttf|svg|eot)(\?v=\d+\.\d+\.\d+)?$/,
+                    loader: 'file-loader',
+                    options: {
+                        name: name,
+                    },
+                },
+            ],
+        },
+    };
+};
+```
+
+Implement it in `webpack.config.js`.
+
+```js
+const common = merge(baseConfig,
+    parts.imageLoader(PATHS.app),
+    parts.loadFonts(PATHS.app),
+    ...
+);
+```
+
+Then we can import in `app/index.js`.
+
+```js
+...
+import component from './component';
+import '../node_modules/font-awesome/css/font-awesome.css';
+```
+
+And then update the component to reflect the styles.
+
+```js
+export default function (){
+    const element = document.createElement( 'h1' );
+    element.className = 'fa fa-spock-o fa-lg';
+    element.innerHTML= 'Hello World';
+    return element;
+}
+```
+
+
