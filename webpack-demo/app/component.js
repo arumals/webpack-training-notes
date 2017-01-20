@@ -1,6 +1,6 @@
 export default function (){
     const element = document.createElement( 'h1' );
-    element.className = 'pure-button';
-    element.innerHTML= 'Hello Lake';
+    element.className = 'fa fa-spock-o fa-lg';
+    element.innerHTML= 'Hello World';
     return element;
 }

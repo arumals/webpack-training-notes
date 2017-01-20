@@ -41,6 +41,9 @@ const common = merge(baseConfig,
     // define image loader
     parts.imageLoader(PATHS.app),
 
+    // define font loader
+    parts.loadFonts(PATHS.app),
+
     // lint the code
     parts.lintCSS(PATHS.app),
     parts.lintJavaScript(PATHS.app)
