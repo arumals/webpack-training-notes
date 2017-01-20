@@ -25,7 +25,6 @@ exports.lintJavaScript = function(paths) {
         module: {
             rules: [{
                 test: /\.js$/,
-                include: paths,
                 use: 'eslint-loader',
                 enforce: 'pre'
             }]
@@ -38,7 +37,6 @@ exports.loadCSS = function(paths) {
         module: {
             rules: [{
                 test: /\.css$/,
-                include: paths,
                 use: ['style-loader', 'css-loader']
             }]
         }
@@ -98,3 +96,20 @@ exports.lintCSS = function(paths) {
         ],
     };
 };
+
+exports.imageLoader = function(paths){
+    return {
+        module:{
+            rules:[{
+                test: /\.(jpg|jpeg|png)$/,
+                include: paths,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 25000,
+                    }
+                }]
+            }]
+        }
+    }
+}

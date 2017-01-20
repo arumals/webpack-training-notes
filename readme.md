@@ -952,4 +952,58 @@ So we can simplify this way.
 },
 ```
 
+### url-loader and file-loader
+
+Install the packages
+
+```sh
+$ npm i --save-dev file-loader url-loader
+```
+
+The `url-loader` package comes with the `limit` option that can be used to defer image generation to file-loader after certain limit is reached.
+
+Wepack will resolve any `url()` statements your styling might have.
+
+```js
+{
+    test: /\.(jpg|png)$/,
+    loader: 'url-loader',
+    options: {
+        limit: 25000,
+    },
+},
+```
+
+If you don't want to inline all together you can use 'file-loader'. The following setup customizes the resulting filename.
+
+```js
+{
+    test: /\.(jpg|png)$/,
+    loader: 'file-loader',
+    options: {
+        name: '[path][name].[hash].[ext]'
+    }
+}
+```
+
+If you want to output your images below an specific directory, set it up like this `name:./directory_name/[hash].ext`.
+
+### svgs
+
+Webpack has few ways to load svgs, the simplest way is through file-loader as follows:
+
+```js
+{
+    test: /\.svg$/,
+    use: 'file-laoder',
+}
+```
+
+You can refer to your SVG's this way.
+
+```css
+.icon {
+    background: url('../assets/icon.svg');
+}
+```
 
