@@ -1007,3 +1007,45 @@ You can refer to your SVG's this way.
 }
 ```
 
+### Compressing images
+
+In case you want to compress your images, use `image-webpack-loader` or `svo-loader` (for svg).
+
+### Utilizing srcset
+
+The `responsive-image-loader` packages allow to generate `srcset` compatible collections of images.
+
+### Referencing to images.
+
+Webpack can pick up images from stylesheets through `@import` and `url()` assuming `css-loader` has been configured. You can also refer images within the code.
+
+```js
+const src = require('./avatar.png');
+
+const Profile = () => {
+    <img src={src} />
+}
+```
+
+If you use react, then you use `babel-plugin-transform-react-jsx-img-import` to generate the `require` automatically.
+
+```js
+let profile = <div>
+    <img src="!avatar.png" className="profile" />
+</div>
+```
+
+It is also possible to set up dynamic imports.
+
+```js
+const src = require(`./images/${id}`);
+```
+
+### Image properties
+
+If you need to retrieve the image properties such as its dimensions, you can do that by using `image-size-loader`.
+
+### Sprites
+
+In order to use sprites you can use `webpack-spritesmith`.
+
