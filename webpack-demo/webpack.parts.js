@@ -144,3 +144,25 @@ exports.generateSourcemaps = function(type){
         devtool: type,
     };
 };
+
+exports.extractBundles = function(bundles, options){
+    const entry = {};
+    const names = [];
+
+    bundles.forEach(({ name, entries }) => {
+        console.log(name,entries);
+        if(entries){
+            entry[name] = entries;
+        }
+        names.push(name);
+    });
+
+    return {
+        entry,
+        plugins: [
+            new webpack.optimize.CommonsChunkPlugin(
+                Object.assign({}, options, { names })
+            )
+        ]
+    };
+};
