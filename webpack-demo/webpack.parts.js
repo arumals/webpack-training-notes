@@ -37,7 +37,14 @@ exports.loadCSS = function(paths) {
         module: {
             rules: [{
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
+                use: [{
+                    loader: 'style-loader'
+                }, {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }]
             }]
         }
     }
@@ -132,3 +139,8 @@ exports.loadFonts = function(options){
     };
 };
 
+exports.generateSourcemaps = function(type){
+    return {
+        devtool: type,
+    };
+};

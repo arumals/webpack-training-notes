@@ -1,4 +1,4 @@
-import 'purecss';
+import 'purecss/build/pure.css';
 import './main.css';
 import component from './component';
 import '../node_modules/font-awesome/css/font-awesome.css';

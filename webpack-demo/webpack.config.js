@@ -23,6 +23,7 @@ const baseConfig = {
     output: {
         path: PATHS.build,
         filename: '[name].js',
+        sourceMapFilename: '[file].map',
     },
 
     // define the plugins
@@ -58,14 +59,18 @@ module.exports = function(env) {
     switch (env) {
 
         case 'production':
+
             serverConfig = merge(
                 common,
+                parts.generateSourcemaps('source-map'),
                 parts.extractCSS(),
                 parts.purifyCSS(PATHS.app)
             );
+
             break;
 
         default:
+
             serverConfig = merge(common, {
 
                     // disable performance hints during development
@@ -80,8 +85,11 @@ module.exports = function(env) {
 
                 },
 
-                // css
+                // CSS
                 parts.loadCSS(PATHS.app),
+
+                // Sourcemaps
+                parts.generateSourcemaps('eval-source-map'),
 
                 // HRM
                 parts.devServer(),
@@ -90,6 +98,7 @@ module.exports = function(env) {
                 { devServer: { hotOnly: false } }
 
             );
+
             break;
 
     }
@@ -97,5 +106,3 @@ module.exports = function(env) {
     return serverConfig;
 
 };
-
-
