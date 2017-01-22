@@ -62,6 +62,10 @@ module.exports = function(env) {
 
             serverConfig = merge(
                 common,
+                parts.extractBundles([{
+                    name: 'vendor',
+                    entries: ['react'],
+                }]),
                 parts.generateSourcemaps('source-map'),
                 parts.extractCSS(),
                 parts.purifyCSS(PATHS.app)
