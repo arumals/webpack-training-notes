@@ -1192,4 +1192,93 @@ export default function (){
 }
 ```
 
+## Building with Webpack.
 
+### Enabling Sourcemaps.
+
+To improve the debuggability of the application, we can set up sourcemaps for both code and styling. These allow to see exactly where the error was raised.
+
+Webpack can generate inline and separate sourcemaps files.
+
+Wepack provides two ways to generate sourcemaps, the shorcut field know as `devtool` and a plugin that gives more options to tweak.
+
+```js
+exports.generateSourcemaps = function(type){
+    return {
+        devtool: type,
+    };
+};
+```
+
+In order to map the styles we need to set that configuration for the css-loader.
+
+```js
+exports.loadCSS = function(paths) {
+    return {
+        module: {
+            rules: [{
+                test: /\.css$/,
+                use: [{
+                    loader: 'style-loader'
+                }, {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }]
+            }]
+        }
+    }
+}
+```
+
+Webpack supports a wide variety of sourcemaps. For now we can enable `eval-source-map` for development and `source-map` for production.
+
+Then we can merge the values in our webpack.config.js for development and production.
+
+```js
+case 'production':
+
+    serverConfig = merge(
+        common,
+        parts.generateSourcemaps('source-map'),
+        ...
+    );
+
+    ...
+
+default:
+
+serverConfig = merge(
+
+    ...
+
+    parts.loadCSS(PATHS.app),
+    parts.generateSourcemaps('eval-source-map'),
+    ...
+);
+```
+
+#### Sourcemap types supported by webpack.
+
+The lower quality, the higher build and rebuild speeds are possible.
+
+- eval (generated code)
+- cheap-eval-source-map (transformed code)
+- cheap-module-eval-source-map (original code)
+- eval-source-map (original source)
+
+Production usage friendly sourcemaps.
+
+- cheap-source-map (transformed code, lines only)
+- cheap-module-source-map (original source, lines only)
+- source-map (original source)
+- hidden-source-map (original withouth reference)
+
+#### SourceMapDevToolPlugin
+
+For more control over the sourcemap generation, it is possible to use the `SourceMapDevToolPlugin`.
+
+#### Dependency sourcemaps.
+
+You can use `source-map-loader` to make webpack aware of the sourcemap dependencies.
