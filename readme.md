@@ -1659,3 +1659,11 @@ module.exports = function(env) {
 ```
 
 Now every time we merge, we are going to see how our project folder is cleaned.
+
+### Deploying to environments.
+
+- `webpack-deploy` (is a collection of deployment utilities).
+- `webpack-s3-sync-plugin` and `webpack-s3-plugin` sync the assets to Amazon S3.
+- `ssh-webpack-plugin` deploys iver SSH.
+
+
