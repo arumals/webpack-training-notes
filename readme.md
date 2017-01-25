@@ -1465,5 +1465,52 @@ You can customize the chunk outputs using... `chunkFilename: path/[name].js`.
 
 #### Setting up code splitting.
 
+Lets implement the code splitting using dynamic import.
 
+##### Tweaking ESLint
 
+Install babel-eslint.
+
+```js
+npm i babel-eslint -D
+```
+
+##### .eslintrc.js
+
+First we need to customize the `.eslintrc.js` so we can process using the eslint parser.
+
+```js
+module.exports = {
+    ...
+    "parser": "babel-eslint",
+    "parserOptions": {
+        ...
+        "allowImportExportEverywhere": true,
+    },
+    ...
+}
+```
+
+Create the component you are going to import to replace element text.
+
+```js
+export default 'Hello from lazy';
+```
+
+Now use dynamic inside `app/components.js`.
+
+```js
+export default function (){
+    ....
+    element.onclick = () => {
+        import('./lazy').then((lazy) => {
+            element.textContent = lazy.default;
+        }).catch((err) => {
+            console.error(err);
+        });
+    };
+    return element;
+}
+```
+
+Now when you run `build` it will generate a new chunk called `0.js`.
