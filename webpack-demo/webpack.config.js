@@ -61,6 +61,7 @@ module.exports = function(env) {
 
         serverConfig = merge(
                 common,
+                parts.clean(PATHS.build),
                 parts.loadJavaScript(PATHS.app),
                 parts.extractBundles([{
                     name: 'vendor',
