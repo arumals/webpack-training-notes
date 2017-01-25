@@ -1,4 +1,3 @@
-const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack-plugin');
@@ -20,7 +19,7 @@ exports.devServer = function() {
     };
 };
 
-exports.lintJavaScript = function(paths) {
+exports.lintJavaScript = function() {
     return {
         module: {
             rules: [{
@@ -29,10 +28,10 @@ exports.lintJavaScript = function(paths) {
                 enforce: 'pre'
             }]
         }
-    }
-}
+    };
+};
 
-exports.loadCSS = function(paths) {
+exports.loadCSS = function() {
     return {
         module: {
             rules: [{
@@ -47,8 +46,8 @@ exports.loadCSS = function(paths) {
                 }]
             }]
         }
-    }
-}
+    };
+};
 
 exports.extractCSS = function(paths) {
     return {
@@ -65,8 +64,8 @@ exports.extractCSS = function(paths) {
         plugins: [
             new ExtractTextPlugin('[name].css')
         ]
-    }
-}
+    };
+};
 
 exports.purifyCSS = function(paths) {
     paths = Array.isArray(paths) ? paths : [paths];
@@ -86,9 +85,9 @@ exports.purifyCSS = function(paths) {
             })
         ]
     };
-}
+};
 
-exports.lintCSS = function(paths) {
+exports.lintCSS = function() {
     return {
         plugins: [
             new StyleLintPlugin({
@@ -117,8 +116,8 @@ exports.imageLoader = function(paths){
                 }]
             }]
         }
-    }
-}
+    };
+};
 
 exports.loadFonts = function(options){
     const name = (options && options.name) || 'fonts/[hash].[ext]';

@@ -58,9 +58,9 @@ module.exports = function(env) {
 
     switch (env) {
 
-        case 'production':
+    case 'production':
 
-            serverConfig = merge(
+        serverConfig = merge(
                 common,
                 parts.extractBundles([{
                     name: 'vendor',
@@ -71,23 +71,23 @@ module.exports = function(env) {
                 parts.purifyCSS(PATHS.app)
             );
 
-            break;
+        break;
 
-        default:
+    default:
 
-            serverConfig = merge(common, {
+        serverConfig = merge(common, {
 
                     // disable performance hints during development
-                    performance: {
-                        hints: false,
-                    },
+            performance: {
+                hints: false,
+            },
 
                     // ?
-                    plugins: [
-                        new webpack.NamedModulesPlugin(),
-                    ],
+            plugins: [
+                new webpack.NamedModulesPlugin(),
+            ],
 
-                },
+        },
 
                 // CSS
                 parts.loadCSS(PATHS.app),
@@ -103,7 +103,7 @@ module.exports = function(env) {
 
             );
 
-            break;
+        break;
 
     }
 
