@@ -1514,3 +1514,27 @@ export default function (){
 ```
 
 Now when you run `build` it will generate a new chunk called `0.js`.
+
+#### Split point using `require.ensure`
+
+```js
+export default function () {
+    ...
+    element.onclick = () => {
+        require.ensure([], (require) => {
+            element.textContent = require('./lazy').default;
+        });
+    };
+    return element;
+}
+```
+
+#### Dynamic loading with require.context
+
+```js
+const req = require.context('./path', true, /\.extension$/);
+req.keys() => ['./path/file1.jade','./path/file2.jade'....,'./path/fileN.jade'];
+```
+
+
+
