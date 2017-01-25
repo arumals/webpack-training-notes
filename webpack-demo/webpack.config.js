@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const parts = require('./webpack.parts');
 
-
 // set the paths
 const PATHS = {
     app: path.join(__dirname, 'app'),
