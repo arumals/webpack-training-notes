@@ -61,6 +61,7 @@ module.exports = function(env) {
 
         serverConfig = merge(
                 common,
+                parts.loadJavaScript(PATHS.app),
                 parts.extractBundles([{
                     name: 'vendor',
                     entries: ['react'],
@@ -74,33 +75,35 @@ module.exports = function(env) {
 
     default:
 
-        serverConfig = merge(common, {
+        serverConfig = merge(common,
 
-                    // disable performance hints during development
-            performance: {
-                hints: false,
+            {
+
+                // disable performance hints during development
+                performance: {
+                    hints: false,
+                },
+
+                            // ?
+                plugins: [
+                    new webpack.NamedModulesPlugin(),
+                ],
+
             },
 
-                    // ?
-            plugins: [
-                new webpack.NamedModulesPlugin(),
-            ],
+            // CSS
+            parts.loadCSS(PATHS.app),
 
-        },
+            // Sourcemaps
+            parts.generateSourcemaps('eval-source-map'),
 
-                // CSS
-                parts.loadCSS(PATHS.app),
+            // HRM
+            parts.devServer(),
 
-                // Sourcemaps
-                parts.generateSourcemaps('eval-source-map'),
+            // disable hotOnly on HRM
+            { devServer: { hotOnly: false } }
 
-                // HRM
-                parts.devServer(),
-
-                // disable hotOnly on HRM
-                { devServer: { hotOnly: false } }
-
-            );
+        );
 
         break;
 

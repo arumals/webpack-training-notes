@@ -165,3 +165,20 @@ exports.extractBundles = function(bundles, options){
         ]
     };
 };
+
+exports.loadJavaScript = function(paths){
+    return {
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    include: paths,
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                    },
+                },
+            ],
+        },
+    };
+};

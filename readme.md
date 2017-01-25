@@ -1536,5 +1536,86 @@ const req = require.context('./path', true, /\.extension$/);
 req.keys() => ['./path/file1.jade','./path/file2.jade'....,'./path/fileN.jade'];
 ```
 
+### Processing with Babel.
+
+Webpack processes ES6 module defnition by default, and transforms them into vanilla JS.
+
+It is important to note that does not transform ES6 specific syntax, such as `(lazy) => {`. This can be a problem specially on older browsers.
+
+One way to work around this problem is to proecess the code through Babel.
+
+#### Using Babel with Webpack.
+
+You can use babel with the webpack through `babel-loader`. It can pick up project level Babel configuration or you can configure at the loader itself.
+
+#### Setting up `babel-loader`
+
+Install the package.
+
+```js
+$ npm i babel-loader babel-core --save-dev
+```
+
+Create the `.babelrc` configuration file.
+
+```js
+{
+    "plugins": ["syntax-dynamic-import"],
+    "presets": [
+        [
+            "es2015",
+            {
+                "modules": false
+            }
+        ]
+    ]
+}
+```
+
+Now define the parser inside the `webpack.parts.js`.
+
+```js
+exports.loadJavaScript = function(paths){
+    return {
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    include: paths,
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                    },
+                },
+            ],
+        },
+    };
+};
+```
+
+And implement it inside the `webpack.config.js`.
+
+```js
+module.exports = function(env) {
+    ...
+    case 'production':
+        serverConfig = merge(
+                common,
+                parts.loadJavaScript(PATHS.app),
+                ...
+            );
+        break;
+    ...
+    return serverConfig;
+};
+```
+
+Now the `js` files will be parsed using `babel-laoder`.
+
+#### Setting up typescript
+
+You can use TypeScript with webpack using the following loaders.
+
+- ts-loader
 
 
