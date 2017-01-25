@@ -1617,5 +1617,45 @@ Now the `js` files will be parsed using `babel-laoder`.
 You can use TypeScript with webpack using the following loaders.
 
 - ts-loader
+- awesome-typescript-loader
+- light-ts-loader
 
+#### Cleaning the build.
 
+Install the `clean-webpack-plugin`.
+
+```sh
+$ npm i clean-webpack-plugin --save-dev
+```
+
+Then create the loader configuration `webpack.parts.js`.
+
+```js
+exports.clean = function(path){
+    return {
+        plugins: [
+            new CleanWebpackPlugin([path]),
+        ],
+    };
+};
+```
+
+Now merge with the production configuration.
+
+```js
+module.exports = function(env) {
+    ...
+    case 'production':
+        serverConfig = merge(
+                common,
+                parts.clean(PATHS.build),
+                ...
+            );
+        break;
+    default:
+    ...
+    return serverConfig;
+};
+```
+
+Now every time we merge, we are going to see how our project folder is cleaned.
