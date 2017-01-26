@@ -1,4 +1,4 @@
-export default function (){
+const component = function (){
     const element = document.createElement('h1');
     element.className = 'fa fa-spock-o fa-lg';
     element.innerHTML= 'Hello World';
@@ -10,4 +10,13 @@ export default function (){
         });
     };
     return element;
-}
+};
+
+const sayHi = function(){
+    console.log('Hi!');
+};
+
+export {
+    component,
+    sayHi
+};

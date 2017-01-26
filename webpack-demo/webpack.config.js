@@ -63,6 +63,7 @@ module.exports = function(env) {
                 common,
                 parts.clean(PATHS.build),
                 parts.loadJavaScript(PATHS.app),
+                parts.minifyJavaScript({ useSourceMap: true }),
                 parts.extractBundles([{
                     name: 'vendor',
                     entries: ['react'],

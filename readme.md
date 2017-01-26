@@ -1666,4 +1666,51 @@ Now every time we merge, we are going to see how our project folder is cleaned.
 - `webpack-s3-sync-plugin` and `webpack-s3-plugin` sync the assets to Amazon S3.
 - `ssh-webpack-plugin` deploys iver SSH.
 
+## Optimizing the build.
 
+Minimification is a process where code is simplified withouth loosing any meaning that matters to the interpreter. Even if we minimify our code we can still generate sourcemaps through the `devtool`.
+
+If we run the `npm run build` we are going to see that we have a big vendor file.
+
+#### Setting up.
+
+Configure the loader inside `webpacks.parts.js`.
+
+```js
+exports.minifyJavaScript = function({ useSourceMap }){
+    return {
+        plugins: [
+            new webpack.optimize.UglifyJsPlugin({
+                sourceMap: useSourceMap,
+                compress: {
+                    warnings: false,
+                }
+            })
+        ]
+    };
+};
+```
+
+Now hook to the configuration inside `webpack.config.js`.
+
+```js
+module.exports = function(env) {
+    ...
+    case 'production':
+        serverConfig = merge(
+                common,
+                parts.clean(PATHS.build),
+                parts.loadJavaScript(PATHS.app),
+                parts.minifyJavaScript({ useSourceMap: true }),
+                ...
+            );
+        break;
+        ...
+    }
+    return serverConfig;
+};
+```
+
+#### Minifying CSS
+
+`css-loader` allows minifying CSS throug `cssnano`.
