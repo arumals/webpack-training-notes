@@ -42,7 +42,7 @@ exports.loadCSS = function() {
                 }, {
                     loader: 'css-loader',
                     options: {
-                        sourceMap: true
+                        sourceMap: true,
                     }
                 }]
             }]
@@ -79,7 +79,6 @@ exports.purifyCSS = function(paths) {
                 }),
                 resolveExtensions: ['.html'],
                 purifyOptions: {
-                    minify: true,
                     info: true,
                 }
 
@@ -189,5 +188,18 @@ exports.clean = function(path){
         plugins: [
             new CleanWebpackPlugin([path]),
         ],
+    };
+};
+
+exports.minifyJavaScript = function({ useSourceMap }){
+    return {
+        plugins: [
+            new webpack.optimize.UglifyJsPlugin({
+                sourceMap: useSourceMap,
+                compress: {
+                    warnings: true,
+                }
+            })
+        ]
     };
 };
