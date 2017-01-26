@@ -1736,3 +1736,45 @@ exports.purifyCSS = function(paths) {
 };
 ```
 
+### Setting environment variables.
+
+A JS minifier can remove dead code `if(false)`. `DefinePlugin` can convert into `if(false)` all free variables such as `if (process.env.NODE_ENV === 'development')`.
+
+Based on this we can define process.env.NODE_ENV so we can replace all those unnecesary blocks of code.
+
+Define a block to set a variable through DefinePlugin inside `webpack.parts.js`.
+
+```js
+exports.setFreeVariable = function(key, value){
+    const env = {};
+    env[key] = JSON.stringify(value);
+    return {
+        plugins: [
+            new webpack.DefinePlugin(env),
+        ]
+    };
+};
+```
+
+Now merge the configuration inside the `webpack.config.js` file.
+
+```js
+module.exports = function(env) {
+    ...
+    case 'production':
+        serverConfig = merge(
+                common,
+                parts.setFreeVariable(
+                    'process.env.NODE_ENV',
+                    'production'
+                ),
+                ...
+            );
+        break;
+    }
+    return serverConfig;
+};
+```
+
+Now when you run `npm run build` its going to reduce the `vendor.js` file.
+

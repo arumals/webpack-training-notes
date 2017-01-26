@@ -150,10 +150,7 @@ exports.extractBundles = function(bundles, options){
     const names = [];
 
     bundles.forEach(({ name, entries }) => {
-        console.log(name,entries);
-        if(entries){
-            entry[name] = entries;
-        }
+        if(entries) entry[name] = entries;
         names.push(name);
     });
 
@@ -198,9 +195,19 @@ exports.minifyJavaScript = function({ useSourceMap }){
             new webpack.optimize.UglifyJsPlugin({
                 sourceMap: useSourceMap,
                 compress: {
-                    warnings: true,
+                    warnings: false,
                 }
             })
+        ]
+    };
+};
+
+exports.setFreeVariable = function(key, value){
+    const env = {};
+    env[key] = JSON.stringify(value);
+    return {
+        plugins: [
+            new webpack.DefinePlugin(env),
         ]
     };
 };
