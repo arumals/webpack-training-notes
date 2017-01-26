@@ -1713,4 +1713,26 @@ module.exports = function(env) {
 
 #### Minifying CSS
 
-`css-loader` allows minifying CSS throug `cssnano`.
+You can compress your css file using the `minify: true` inside the PurifyCSS plugin.
+
+```js
+exports.purifyCSS = function(paths) {
+    paths = Array.isArray(paths) ? paths : [paths];
+    return {
+        plugins: [
+            new PurifyCSSPlugin({
+                basePath: '/',
+                paths: paths.map((path) => {
+                    return `${path}/*`;
+                }),
+                resolveExtensions: ['.html'],
+                purifyOptions: {
+                    info: true,
+                    minify: true,
+                }
+            })
+        ]
+    };
+};
+```
+
