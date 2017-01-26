@@ -43,6 +43,7 @@ exports.loadCSS = function() {
                     loader: 'css-loader',
                     options: {
                         sourceMap: true,
+                        minimize: true,
                     }
                 }]
             }]
@@ -58,7 +59,7 @@ exports.extractCSS = function(paths) {
                 include: paths,
                 loader: ExtractTextPlugin.extract({
                     fallbackLoader: 'style-loader',
-                    loader: 'css-loader'
+                    loader: 'css-loader',
                 })
             }]
         },
@@ -80,8 +81,8 @@ exports.purifyCSS = function(paths) {
                 resolveExtensions: ['.html'],
                 purifyOptions: {
                     info: true,
+                    minify: true,
                 }
-
             })
         ]
     };
