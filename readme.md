@@ -1778,3 +1778,71 @@ module.exports = function(env) {
 
 Now when you run `npm run build` its going to reduce the `vendor.js` file.
 
+### Adding hashes to filenames.
+
+Webpack provides placeholders for this purposes. These strings are used to attach specific information to webpack output.
+
+- [path] (file path).
+- [name] (file name).
+- [ext] (file extension).
+- [hash] (build hash).
+- [chunkhash] (returns a chunk specific hash).
+- [contenthash] (a hash to specific content, available for `ExtractTextPlugin` only).
+
+Its preferable to use particularly `hash` and `chunkhash` only for production.
+
+We can implement this hash modifying the `output` inside the `webpack.config.js` file.
+
+```js
+{
+  output: {
+    path: PATHS.build,
+    filename: '[name].[chunkhash].js',
+  },
+},
+```
+
+There are few places in the build we need to tweak to generate proper hashes.
+
+We must create a new object to merge the output configuration for our production environment inside `webpack.config.js`.
+
+```js
+module.exports = function(env) {
+    case 'production':
+        serverConfig = merge(
+                common,
+                {
+                    output: {
+                        chunkFilename:'scripts/[chunkhash].js',
+                        filename: '[name].[chunkhash].js',
+                    }
+                }
+                ...
+            );
+        break;
+    return serverConfig;
+};
+```
+
+We also need add the `contenthash` value to our css inside the `webpack.parts.js`.
+
+```js
+exports.extractCSS = function(paths) {
+    return {
+        module: {
+            rules: [{
+                test: /\.css$/,
+                include: paths,
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader',
+                    loader: 'css-loader',
+                })
+            }]
+        },
+        plugins: [
+            new ExtractTextPlugin('[name].[contenthash].css')
+        ]
+    };
+};
+```
+

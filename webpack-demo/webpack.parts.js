@@ -64,7 +64,7 @@ exports.extractCSS = function(paths) {
             }]
         },
         plugins: [
-            new ExtractTextPlugin('[name].css')
+            new ExtractTextPlugin('[name].[contenthash].css')
         ]
     };
 };

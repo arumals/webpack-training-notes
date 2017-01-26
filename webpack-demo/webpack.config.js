@@ -21,7 +21,7 @@ const baseConfig = {
     // define the output
     output: {
         path: PATHS.build,
-        filename: '[name].js',
+        filename: '[name].[chunkhash].js',
         sourceMapFilename: '[file].map',
     },
 
@@ -61,6 +61,13 @@ module.exports = function(env) {
 
         serverConfig = merge(
                 common,
+                {
+                    output: {
+                        chunkFilename:'scripts/[chunkhash].js',
+                        filename: '[name].[chunkhash].js',
+                    }
+                }
+                ,
                 parts.setFreeVariable(
                     'process.env.NODE_ENV',
                     'production'
