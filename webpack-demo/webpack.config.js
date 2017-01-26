@@ -61,6 +61,10 @@ module.exports = function(env) {
 
         serverConfig = merge(
                 common,
+                parts.setFreeVariable(
+                    'process.env.NODE_ENV',
+                    'production'
+                ),
                 parts.clean(PATHS.build),
                 parts.loadJavaScript(PATHS.app),
                 parts.minifyJavaScript({ useSourceMap: true }),
