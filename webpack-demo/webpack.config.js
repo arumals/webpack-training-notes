@@ -50,12 +50,12 @@ const common = merge(baseConfig,
 
 );
 
-// export the configuration
 module.exports = function(env) {
 
     let serverConfig;
 
     switch (env) {
+// export the configuration
 
     case 'production':
 
