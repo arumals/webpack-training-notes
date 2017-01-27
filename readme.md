@@ -1846,3 +1846,55 @@ exports.extractCSS = function(paths) {
 };
 ```
 
+### Understanding npm Lookup
+
+Show the current root folder.
+
+```sh
+$ npm root
+```
+
+Show the global root folder.
+
+```js
+$ npm root -g
+```
+
+#### Version Ranges
+
+Npm supports multiple version ranges.
+
+- `~` only patch versions `~1.2` would be equal to `1.2.x`.
+- `^` matches to minor versions `0.2.2` would be equal to `0.2.x`
+- `*` matches the major releases (this is the most dangerous of the ranges)
+- `>= 1.3.0 < 2.0.0` range between versions
+
+You can set your default range using `npm config set save-prefix='^'`
+
+#### Dealing with globals.
+
+Some times modules might depend on globals like the `$` provided by `jQuery`.
+
+```js
+{
+    module: {
+        rules: {
+            test: require.resolve('jquery-plugin'),
+            loader: 'imports-loader?$=jquery',
+        }
+    }
+}
+```
+
+Webpack's `ProvidePlugin` can be used for similar purposes.
+
+```js
+{
+    plugins: [
+        new webpack.ProvidePlugin([
+            $: 'jquery'
+        ])
+    ]
+}
+```
+
