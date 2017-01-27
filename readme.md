@@ -1898,3 +1898,24 @@ Webpack's `ProvidePlugin` can be used for similar purposes.
 }
 ```
 
+### Authoring packages.
+
+Webpack it supports a format known as UMD format.
+
+#### Anatomy of a npm package.
+
+- `index.js`
+- `package.json` - npm metadata in JSON format
+- `README.md` - written in Markdown format and provides an overview
+- `LICENSE` - include licensing information within your project
+- `CONTRIBUTING.md` - a guide for potential contributors
+- `CHANGELOG.md` - describes the major changes per version
+- `.travis.yml` - is a popular continous integration platform
+- `.gitignore` - ignore patterns for git
+- `.npmignore` - ignore patterns for npm
+- `.eslintignore` - ignore patterns for ESLint
+- `.eslintrc` - linting rules
+- `webpack.config.js`
+
+If you want to decrease the size of your dependencies, consider using a tool like `package.config.checker`.
+
