@@ -18,10 +18,15 @@ const baseConfig = {
         app: PATHS.app,
     },
 
+    // resolve extensions
+    resolve: {
+        extensions: ['.js','.jsx'],
+    },
+
     // define the output
     output: {
         path: PATHS.build,
-        filename: '[name].[chunkhash].js',
+        filename: '[name].[hash].js',
         sourceMapFilename: '[file].map',
     },
 
@@ -47,7 +52,6 @@ const common = merge(baseConfig,
     // lint the code
     parts.lintCSS(PATHS.app),
     parts.lintJavaScript(PATHS.app)
-
 );
 
 module.exports = function(env) {
@@ -61,12 +65,12 @@ module.exports = function(env) {
 
         serverConfig = merge(
                 common,
-                {
-                    output: {
-                        chunkFilename:'scripts/[chunkhash].js',
-                        filename: '[name].[chunkhash].js',
-                    }
+            {
+                output: {
+                    chunkFilename:'scripts/[chunkhash].js',
+                    filename: '[name].[chunkhash].js',
                 }
+            }
                 ,
                 parts.setFreeVariable(
                     'process.env.NODE_ENV',

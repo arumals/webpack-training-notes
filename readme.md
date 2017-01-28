@@ -1919,3 +1919,119 @@ Webpack it supports a format known as UMD format.
 
 If you want to decrease the size of your dependencies, consider using a tool like `package.config.checker`.
 
+### Configuring React
+
+`create-react-app` encapsulates a lot of best pracices related to developing React applications.
+
+Create a new react app.
+
+```sh
+$ create-react-app myapp
+$ cd myapp
+```
+
+#### Setting up Babel with React
+
+Most of the projects rely on a format known as JSX. Some React developers prefer to attach type annotations to their code using a language syntax know as Flow. TypeScript is another viable alternative.
+
+#### Configuring with Webpack
+
+In order to process react we need to install the `babel-preset-react` package.
+
+```sh
+$ npm i babel-preset-react --save-dev
+```
+
+We also need to add this to the presets inside `.babelrc`.
+
+```js
+{
+  "presets": [
+    [
+      "es2015",
+      {
+        "modules": false
+      }
+    ],
+    "react"
+  ]
+}
+```
+
+Now inside `webpack.config.js` we have to define js and jsx to be parsed.
+
+```js
+const baseConfig = {
+    ...
+    resolve: {
+        extensions: ['.js','.jsx'],
+    },
+    ...
+};
+```
+
+##### Rendering a React Application
+
+If we want to mount an application without any html file we can use `html-webpack-template` combined with `html-webpack-template` or `html-webpack-template-pug`.
+
+```js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackTemplate = require('html-webpack-template');
+
+const common = {
+...
+plugins: [
+    new HtmlWebpackPlugin({
+        template: HtmlWebpackTemplate,
+            title: 'Demo app',
+            appMountId: 'app', // Generate #app where to mount
+            mobile: true, // Scale page on mobile
+            inject: false, // html-webpack-template requires this to work
+        }),
+    ],
+};
+
+module.exports = function(env) {
+    ...
+};
+```
+
+And we can define the access point inside the `app/index.js`.
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+    <div>Hello world</div>,
+    document.getElementById('app')
+);
+```
+
+#### Babel-Based optimization.
+
+- `babel-react-optimize` implements a variety of React specific optimizations.
+- `babel-plugin-transform-react-remove-prop-types` is handy to remove `propType` related code from your production build.
+
+#### Using react-lite instead of React for production.
+
+The `react-lite` package implements React's API apart from features like `propTypes` and server side rendering.
+
+The `preact-compat` package implements a smaller subset of features and is even smaller than `react-lite`.
+
+To get started install react lite:
+
+```sh
+$ npm i react-lite --save-dev
+```
+
+Then inside the configuration set the resolve value.
+
+```js
+resolve: {
+    alias: {
+        'react': 'react-lite',
+        'react-dom': 'react-lite',
+    },
+},
+```
