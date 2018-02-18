@@ -1846,3 +1846,76 @@ exports.extractCSS = function(paths) {
 };
 ```
 
+### Understanding npm Lookup
+
+Show the current root folder.
+
+```sh
+$ npm root
+```
+
+Show the global root folder.
+
+```js
+$ npm root -g
+```
+
+#### Version Ranges
+
+Npm supports multiple version ranges.
+
+- `~` only patch versions `~1.2` would be equal to `1.2.x`.
+- `^` matches to minor versions `0.2.2` would be equal to `0.2.x`
+- `*` matches the major releases (this is the most dangerous of the ranges)
+- `>= 1.3.0 < 2.0.0` range between versions
+
+You can set your default range using `npm config set save-prefix='^'`
+
+#### Dealing with globals.
+
+Some times modules might depend on globals like the `$` provided by `jQuery`.
+
+```js
+{
+    module: {
+        rules: {
+            test: require.resolve('jquery-plugin'),
+            loader: 'imports-loader?$=jquery',
+        }
+    }
+}
+```
+
+Webpack's `ProvidePlugin` can be used for similar purposes.
+
+```js
+{
+    plugins: [
+        new webpack.ProvidePlugin([
+            $: 'jquery'
+        ])
+    ]
+}
+```
+
+### Authoring packages.
+
+Webpack it supports a format known as UMD format.
+
+#### Anatomy of a npm package.
+
+- `index.js`
+- `package.json` - npm metadata in JSON format
+- `README.md` - written in Markdown format and provides an overview
+- `LICENSE` - include licensing information within your project
+- `CONTRIBUTING.md` - a guide for potential contributors
+- `CHANGELOG.md` - describes the major changes per version
+- `.travis.yml` - is a popular continous integration platform
+- `.gitignore` - ignore patterns for git
+- `.npmignore` - ignore patterns for npm
+- `.eslintignore` - ignore patterns for ESLint
+- `.eslintrc` - linting rules
+- `webpack.config.js`
+
+If you want to decrease the size of your dependencies, consider using a tool like `package.config.checker`.
+
